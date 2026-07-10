@@ -88,6 +88,29 @@ if db_uri.startswith('postgresql'):
             'options': '-c statement_timeout=30000'
         }
     }
+elif db_uri.startswith('sqlite+libsql'):
+    auth_token = None
+    import urllib.parse as urlparse
+    try:
+        parsed_url = urlparse.urlparse(db_uri)
+        query_params = urlparse.parse_qs(parsed_url.query)
+        if 'authToken' in query_params:
+            auth_token = query_params['authToken'][0]
+            # Strip query params to pass a clean URL to create_engine
+            clean_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}"
+            app.config['SQLALCHEMY_DATABASE_URI'] = clean_url
+    except Exception as e:
+        print(f"⚠️  Warning: Error parsing Turso connection URI: {e}")
+        
+    if not auth_token:
+        auth_token = os.getenv('TURSO_AUTH_TOKEN')
+        
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'connect_args': {
+            'auth_token': auth_token,
+            'secure': True
+        }
+    }
 else:
     # SQLite doesn't need these options
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}

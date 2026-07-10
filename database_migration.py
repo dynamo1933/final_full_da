@@ -56,6 +56,34 @@ def create_app():
             db_url = None
         
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///daiva_anughara.db'
+    
+    # Configure engine options for Turso
+    db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+    if db_uri.startswith('sqlite+libsql'):
+        auth_token = None
+        import urllib.parse as urlparse
+        try:
+            parsed_url = urlparse.urlparse(db_uri)
+            query_params = urlparse.parse_qs(parsed_url.query)
+            if 'authToken' in query_params:
+                auth_token = query_params['authToken'][0]
+                clean_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}"
+                app.config['SQLALCHEMY_DATABASE_URI'] = clean_url
+        except Exception as e:
+            print(f"⚠️  Warning: Error parsing Turso URI in migration: {e}")
+            
+        if not auth_token:
+            auth_token = os.getenv('TURSO_AUTH_TOKEN')
+            
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+            'connect_args': {
+                'auth_token': auth_token,
+                'secure': True
+            }
+        }
+    else:
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+        
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = 'uploads'
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
