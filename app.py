@@ -35,6 +35,8 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here-change-
 # Password contains @ which needs to be URL-encoded as %40
 # Railway provides DATABASE_URL, check for it first
 db_url = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
+if db_url:
+    db_url = db_url.strip()
 
 # SQLAlchemy 1.4+ requires 'postgresql://' instead of 'postgres://'
 if db_url and db_url.startswith("postgres://"):

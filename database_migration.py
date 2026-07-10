@@ -33,6 +33,8 @@ def create_app():
     from dotenv import load_dotenv
     load_dotenv()
     db_url = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
+    if db_url:
+        db_url = db_url.strip()
     if db_url and db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
     if db_url and db_url.startswith("libsql://"):
