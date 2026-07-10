@@ -40,6 +40,19 @@ db_url = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
 if db_url and db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
+# Convert libsql:// to sqlite+libsql:// for Turso compatibility
+if db_url and db_url.startswith("libsql://"):
+    db_url = db_url.replace("libsql://", "sqlite+libsql://", 1)
+
+# Fallback to local SQLite if using sqlite+libsql but the driver is not installed
+if db_url and db_url.startswith("sqlite+libsql://"):
+    try:
+        import sqlalchemy_libsql
+    except ImportError:
+        print("⚠️  Warning: 'sqlalchemy-libsql' driver is not installed (expected on Windows Python 3.14).")
+        print("   Falling back to local SQLite database for local development.")
+        db_url = None
+
 # Check if running on Vercel
 is_vercel = os.getenv('VERCEL') == '1' or os.getenv('VERCEL') is not None
 

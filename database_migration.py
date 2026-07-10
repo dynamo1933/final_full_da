@@ -16,6 +16,7 @@ New Fields Added:
 """
 
 import sys
+import os
 from flask import Flask
 from models import db, User
 from datetime import datetime
@@ -27,9 +28,26 @@ def create_app():
 
     # Configuration from app.py
     app.config['SECRET_KEY'] = 'your-secret-key-here-change-in-production'
-    # Use PostgreSQL for database migrations
-    # Password contains @ which needs to be URL-encoded as %40
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:_Bottlemepani%4035@db.cuyilngsmocyhadlbrgv.supabase.co:5432/postgres'
+    
+    # Load env variables dynamically
+    from dotenv import load_dotenv
+    load_dotenv()
+    db_url = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
+    if db_url and db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+    if db_url and db_url.startswith("libsql://"):
+        db_url = db_url.replace("libsql://", "sqlite+libsql://", 1)
+        
+    # Fallback to local SQLite if using sqlite+libsql but the driver is not installed
+    if db_url and db_url.startswith("sqlite+libsql://"):
+        try:
+            import sqlalchemy_libsql
+        except ImportError:
+            print("⚠️  Warning: 'sqlalchemy-libsql' driver is not installed (expected on Windows Python 3.14).")
+            print("   Falling back to local SQLite database for migration.")
+            db_url = None
+        
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///daiva_anughara.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = 'uploads'
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
