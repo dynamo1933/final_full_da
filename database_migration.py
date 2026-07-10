@@ -40,6 +40,12 @@ def create_app():
     if db_url and db_url.startswith("libsql://"):
         db_url = db_url.replace("libsql://", "sqlite+libsql://", 1)
         
+    # Ensure there is a slash before the query parameters for sqlite+libsql
+    if db_url and "sqlite+libsql://" in db_url and "?" in db_url:
+        parts = db_url.split("?", 1)
+        if not parts[0].endswith("/"):
+            db_url = f"{parts[0]}/?{parts[1]}"
+        
     # Fallback to local SQLite if using sqlite+libsql but the driver is not installed
     if db_url and db_url.startswith("sqlite+libsql://"):
         try:
