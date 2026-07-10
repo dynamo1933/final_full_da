@@ -285,6 +285,25 @@ def update_last_active():
             print(f"⚠️  Error updating last_active: {e}")
             db.session.rollback()
 
+@app.route('/debug-db')
+def debug_db():
+    try:
+        from models import User
+        count = User.query.count()
+        return jsonify({
+            'success': True,
+            'db_uri': app.config['SQLALCHEMY_DATABASE_URI'].split('@')[-1] if '@' in app.config['SQLALCHEMY_DATABASE_URI'] else app.config['SQLALCHEMY_DATABASE_URI'],
+            'user_count': count
+        })
+    except Exception as e:
+        import traceback
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'traceback': traceback.format_exc(),
+            'db_uri': app.config['SQLALCHEMY_DATABASE_URI'].split('@')[-1] if '@' in app.config['SQLALCHEMY_DATABASE_URI'] else app.config['SQLALCHEMY_DATABASE_URI']
+        })
+
 # Sample Ashtami dates data
 ASHTAMI_DATES = [
     {
