@@ -96,8 +96,8 @@ elif db_uri.startswith('sqlite+libsql'):
         query_params = urlparse.parse_qs(parsed_url.query)
         if 'authToken' in query_params:
             auth_token = query_params['authToken'][0]
-            # Strip query params to pass a clean URL to create_engine
-            clean_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}"
+            # Strip query params to pass a clean URL to create_engine, but keep secure=true to enforce HTTPS/TLS
+            clean_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}?secure=true"
             app.config['SQLALCHEMY_DATABASE_URI'] = clean_url
     except Exception as e:
         print(f"⚠️  Warning: Error parsing Turso connection URI: {e}")

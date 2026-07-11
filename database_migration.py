@@ -67,7 +67,7 @@ def create_app():
             query_params = urlparse.parse_qs(parsed_url.query)
             if 'authToken' in query_params:
                 auth_token = query_params['authToken'][0]
-                clean_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}"
+                clean_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}?secure=true"
                 app.config['SQLALCHEMY_DATABASE_URI'] = clean_url
         except Exception as e:
             print(f"⚠️  Warning: Error parsing Turso URI in migration: {e}")
