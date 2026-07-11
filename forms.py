@@ -17,6 +17,32 @@ class RegistrationForm(FlaskForm):
     full_name = StringField('Full Name', validators=[DataRequired(), Length(max=100)])
     phone = StringField('Phone Number', validators=[Length(max=20)])
     address = TextAreaField('Address (Optional)', validators=[Length(max=500)])
+    gender = SelectField('Gender', choices=[
+        ('', 'Select Gender'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other')
+    ], validators=[DataRequired()])
+    date_of_birth = DateField('Date of Birth (Optional)', format='%Y-%m-%d', validators=[Optional()])
+    location = StringField('Current City / State / Country', validators=[DataRequired(), Length(max=100)])
+    preferred_language = SelectField('Preferred Language', choices=[
+        ('', 'Select Preferred Language'),
+        ('English', 'English'),
+        ('Hindi', 'Hindi'),
+        ('Sanskrit', 'Sanskrit'),
+        ('Tamil', 'Tamil'),
+        ('Telugu', 'Telugu'),
+        ('Kannada', 'Kannada'),
+        ('Malayalam', 'Malayalam'),
+        ('Marathi', 'Marathi'),
+        ('Gujarati', 'Gujarati'),
+        ('Bengali', 'Bengali'),
+        ('Odia', 'Odia'),
+        ('Punjabi', 'Punjabi'),
+        ('Assamese', 'Assamese'),
+        ('Other', 'Other')
+    ], validators=[DataRequired()])
+    referral_source = StringField('How did you find us? (Optional)', validators=[Optional(), Length(max=100)])
     practice_level = SelectField('Practice Level', choices=[
         ('', 'Select Practice Level'),
         ('Beginner', 'Beginner'),

@@ -28,6 +28,13 @@ class User(UserMixin, db.Model):
     # Profile picture
     profile_picture = db.Column(db.String(255), nullable=True)  # Path to profile picture
     
+    # New registration fields
+    date_of_birth = db.Column(db.Date, nullable=True)
+    gender = db.Column(db.String(20), nullable=False, default='Other')
+    location = db.Column(db.String(100), nullable=True)
+    preferred_language = db.Column(db.String(50), nullable=True)
+    referral_source = db.Column(db.String(100), nullable=True)
+    
     # Mandala access permissions
     mandala_1_access = db.Column(db.Boolean, default=True)  # All users get access to Mandala 1
     mandala_2_access = db.Column(db.Boolean, default=False)  # Admin must approve

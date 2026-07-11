@@ -131,6 +131,91 @@
                                 {% endif %}
                             </div>
                             
+                            <div class="form-group">
+                                <label for="{{ form.gender.id }}">Gender</label>
+                                <div class="input-wrapper">
+                                    {{ form.gender(class="form-control", **{"required": True}) }}
+                                    <div class="input-icon">
+                                        <i class="fas fa-venus-mars"></i>
+                                    </div>
+                                </div>
+                                {% if form.gender.errors %}
+                                    <div class="error-messages">
+                                        {% for error in form.gender.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.date_of_birth.id }}">Date of Birth (Optional)</label>
+                                <div class="input-wrapper">
+                                    {{ form.date_of_birth(class="form-control", type="date") }}
+                                    <div class="input-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                </div>
+                                {% if form.date_of_birth.errors %}
+                                    <div class="error-messages">
+                                        {% for error in form.date_of_birth.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.location.id }}">Current City / State / Country</label>
+                                <div class="input-wrapper">
+                                    {{ form.location(class="form-control", placeholder="e.g. Mumbai, Maharashtra, India", **{"required": True}) }}
+                                    <div class="input-icon">
+                                        <i class="fas fa-globe"></i>
+                                    </div>
+                                </div>
+                                {% if form.location.errors %}
+                                    <div class="error-messages">
+                                        {% for error in form.location.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.preferred_language.id }}">Preferred Language</label>
+                                <div class="input-wrapper">
+                                    {{ form.preferred_language(class="form-control", **{"required": True}) }}
+                                    <div class="input-icon">
+                                        <i class="fas fa-language"></i>
+                                    </div>
+                                </div>
+                                {% if form.preferred_language.errors %}
+                                    <div class="error-messages">
+                                        {% for error in form.preferred_language.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="{{ form.referral_source.id }}">How did you find us? (Optional)</label>
+                                <div class="input-wrapper">
+                                    {{ form.referral_source(class="form-control", placeholder="e.g. YouTube, Friend, Search Engine") }}
+                                    <div class="input-icon">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                </div>
+                                {% if form.referral_source.errors %}
+                                    <div class="error-messages">
+                                        {% for error in form.referral_source.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
                             <div class="form-group full-width">
                                 <label for="{{ form.address.id }}">Address (Optional)</label>
                                 <div class="input-wrapper">
