@@ -36,7 +36,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here-change-
 # Railway provides DATABASE_URL, check for it first
 db_url = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
 if db_url:
-    db_url = db_url.strip()
+    db_url = db_url.strip().replace("\n", "").replace("\r", "")
 
 # SQLAlchemy 1.4+ requires 'postgresql://' instead of 'postgres://'
 if db_url and db_url.startswith("postgres://"):
@@ -107,8 +107,7 @@ elif db_uri.startswith('sqlite+libsql'):
         
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         'connect_args': {
-            'auth_token': auth_token,
-            'secure': True
+            'auth_token': auth_token
         }
     }
 else:

@@ -34,7 +34,7 @@ def create_app():
     load_dotenv()
     db_url = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
     if db_url:
-        db_url = db_url.strip()
+        db_url = db_url.strip().replace("\n", "").replace("\r", "")
     if db_url and db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
     if db_url and db_url.startswith("libsql://"):
@@ -77,8 +77,7 @@ def create_app():
             
         app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
             'connect_args': {
-                'auth_token': auth_token,
-                'secure': True
+                'auth_token': auth_token
             }
         }
     else:
